@@ -5,6 +5,9 @@ from .models import PdfFunction
 
 # Create your views here.
 def form(request):
+    """this view renders form fields from forms.py and if data is posted creates session and redirects you
+    to the form_plot view
+    Session.objects.all().delete() delets session when new form is requested"""
     Session.objects.all().delete()
     if request.method == 'POST':
         form = PdfForm(request.POST)
@@ -20,6 +23,7 @@ def form(request):
             request.session['g'] = form.cleaned_data['g']
             request.session['u'] = form.cleaned_data['u']
             request.session['d'] = form.cleaned_data['d']
+            request.session['scale'] = form.cleaned_data['scale']
 
             return redirect('form_plot')
     else:
@@ -27,6 +31,8 @@ def form(request):
     return render(request, 'visualPDF/form.html', {'form':form})
 
 def form_plot(request):
+    """this view collects data from created session and renders picture in browsers new window.
+    It is done by creating PdfFunction object and using plot module from that objects"""
     functions = request.session['functions']
     compare_with = request.session['compare_with']
     Q2 = request.session['Q2']
@@ -38,13 +44,15 @@ def form_plot(request):
     g = request.session['g']
     u = request.session['u']
     d = request.session['d']
+    scale = request.session['scale']
 
-    pdf = PdfFunction(functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d)
+    pdf = PdfFunction(functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d, scale)
     picture = pdf.plot()
     #Session.objects.all().delete()
     return render(request, 'visualPDF/form_plot.html',{'picture':picture})
 
 def form_detail(request):
+    """this view is currently used for testing"""
     detail = []
     functions = request.session['functions']
     compare_with = request.session['compare_with']

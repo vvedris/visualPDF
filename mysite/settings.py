@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# The key is set in like env variable
+# The key is set like env variable
 SECRET_KEY = os.environ.get('secret_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
+#added my app name and crispy_forms
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default':numpy.linspace(self.xmin, self.xmax, self.points) {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -110,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Zagreb'
+TIME_ZONE = 'Europe/Zagreb' #changed time zone to Croatia time
 
 USE_I18N = True
 

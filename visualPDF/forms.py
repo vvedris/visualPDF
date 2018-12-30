@@ -4,6 +4,8 @@ from crispy_forms.layout import Submit
 
 class PdfForm(forms.Form):
 
+    """creates crispy_forms that gathers data needed for dynamically serving images"""
+
     functions = forms.ChoiceField(choices=[('NNPDF21_lo_as_0119_100','NNPDF21_lo_as_0119_100'),('cteq66','cteq66'),('CT10','CT10')],
     widget = forms.Select)
     compare_with = forms.ChoiceField(choices=[('none','none'),('NNPDF21_lo_as_0119_100','NNPDF21_lo_as_0119_100'),('cteq66','cteq66'),('CT10','CT10')],
@@ -17,8 +19,10 @@ class PdfForm(forms.Form):
     g = forms.BooleanField(required=False)
     u = forms.BooleanField(required=False)
     d = forms.BooleanField(required=False)
+    scale = forms.ChoiceField(choices=[('lin','lin'),('log','log')], widget = forms.RadioSelect(), initial = 'log')
 
     def __init__(self, *args, **kwargs):
+        """crispy_forms helper functions that manages form layout and design"""
         self.helper =FormHelper()
         self.helper.form_class = 'blueForms'
         self.helper.form_id = 'id-PdfForm'
