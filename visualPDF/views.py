@@ -24,6 +24,7 @@ def form(request):
             request.session['u'] = form.cleaned_data['u']
             request.session['d'] = form.cleaned_data['d']
             request.session['scale'] = form.cleaned_data['scale']
+            request.session['error'] = form.cleaned_data['error']
 
             return redirect('form_plot')
     else:
@@ -32,7 +33,7 @@ def form(request):
 
 def form_plot(request):
     """this view collects data from created session and renders picture in browsers new window.
-    It is done by creating PdfFunction object and using plot module from that objects"""
+    It is done by creating PdfFunction object and using plot or error plot module from that objects"""
     functions = request.session['functions']
     compare_with = request.session['compare_with']
     Q2 = request.session['Q2']
@@ -45,10 +46,13 @@ def form_plot(request):
     u = request.session['u']
     d = request.session['d']
     scale = request.session['scale']
+    error = request.session['error']
 
     pdf = PdfFunction(functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d, scale)
-    picture = pdf.plot()
-    #Session.objects.all().delete()
+    if error == 'clean':
+        picture = pdf.plot()
+    else:
+        picture = pdf.errorplot()
     return render(request, 'visualPDF/form_plot.html',{'picture':picture})
 
 def form_detail(request):
