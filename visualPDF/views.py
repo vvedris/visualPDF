@@ -12,23 +12,31 @@ def form(request):
     if request.method == 'POST':
         form = PdfForm(request.POST)
         if form.is_valid():
-            request.session['functions'] = form.cleaned_data['functions']
-            request.session['compare_with'] = form.cleaned_data['compare_with']
-            request.session['Q2'] = form.cleaned_data['Q2']
-            request.session['xmin'] = form.cleaned_data['xmin']
-            request.session['xmax'] = form.cleaned_data['xmax']
-            request.session['points'] = form.cleaned_data['points']
-            request.session['ymin'] = form.cleaned_data['ymin']
-            request.session['ymax'] = form.cleaned_data['ymax']
-            request.session['g'] = form.cleaned_data['g']
-            request.session['u'] = form.cleaned_data['u']
-            request.session['d'] = form.cleaned_data['d']
-            request.session['scale'] = form.cleaned_data['scale']
-            request.session['error'] = form.cleaned_data['error']
+            functions = form.cleaned_data['functions']
+            compare_with = form.cleaned_data['compare_with']
+            Q2 = form.cleaned_data['Q2']
+            xmin = form.cleaned_data['xmin']
+            xmax = form.cleaned_data['xmax']
+            points = form.cleaned_data['points']
+            ymin = form.cleaned_data['ymin']
+            ymax = form.cleaned_data['ymax']
+            g = form.cleaned_data['g']
+            u = form.cleaned_data['u']
+            d = form.cleaned_data['d']
+            scale = form.cleaned_data['scale']
+            error = form.cleaned_data['error']
 
-            return redirect('form_plot')
+            pdf = PdfFunction(functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d, scale)
+
+            if error == 'clean':
+                picture = pdf.plot()
+            else:
+                picture = pdf.errorplot()
+
+            return render(request, 'visualPDF/form.html', {'form':form, 'picture':picture})
     else:
         form = PdfForm()
+
     return render(request, 'visualPDF/form.html', {'form':form})
 
 def form_plot(request):
@@ -72,3 +80,6 @@ def form_detail(request):
     detail = [functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d]
 
     return render(request, 'visualPDF/form_detail.html',{'detail':detail})
+
+def form_picture(request):
+    return render(request, 'visualPDF/form_picture.html',{})
