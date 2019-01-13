@@ -7,14 +7,20 @@
     <title>PDF Visualization</title>
   </head>
   <body>
-    <p>
-    <h1>PDF visualize</h1>
-    {% block content %}
-    {% endblock %}
-    </p>
-    <p>
-    {% block picture %}
-    {% endblock %}
-    </p>
+    <div class="container">
+      <div class="row">
+        <h1>PDF visualize</h1>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          {% block content %}
+          {% endblock %}
+        </div>
+        <div class="col">
+          {% block picture %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
   </body>
 </html>

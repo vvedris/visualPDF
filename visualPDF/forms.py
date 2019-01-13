@@ -1,6 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout, Row, Column
 
 class PdfForm(forms.Form):
 
@@ -24,10 +24,43 @@ class PdfForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         """crispy_forms helper functions that manages form layout and design"""
+        super(PdfForm,self).__init__(*args, **kwargs)
         self.helper =FormHelper()
         self.helper.form_class = 'blueForms'
         self.helper.form_id = 'id-PdfForm'
         self.helper.form_method = 'post'
         self.helper.form_action = 'form'
+        self.helper.layout = Layout(
+            Row(
+                Column('functions', css_class='form-group mx-sm-2'),
+                Column('compare_with', css_class='form-group mx-sm-2'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('Q2', css_class='form-group mx-sm-2'),
+                css_class='form-row'
+                ),
+            Row(
+                Column('xmin', css_class='form-group mx-sm-2'),
+                Column('xmax', css_class='form-group mx-sm-2'),
+                Column('points', css_class='form-group mx-sm-2'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('ymin', css_class='form-group mx-sm-2'),
+                Column('ymax', css_class='form-group mx-sm-2'),
+                css_class='form-row'
+                ),
+            Row(
+                Column('g', css_class='form-check mx-sm-2'),
+                Column('u', css_class='form-check mx-sm-2'),
+                Column('d', css_class='form-check mx-sm-2'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('scale', css_class='form-group mx-sm-2'),
+                Column('error', css_class='form-group mx-sm-2'),
+                css_class='form-row'
+            )
+        )
         self.helper.add_input(Submit('plot','Plot'))
-        super(PdfForm,self).__init__(*args, **kwargs)
