@@ -9,6 +9,8 @@ import base64
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle
 
+lhapdf.pathsAppend('/home/vvedris/visualPDF/share/LHAPDF')
+
 # Create your models here.
 class Parton(models.Model):
 
