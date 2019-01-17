@@ -33,8 +33,11 @@ def form(request):
             else:
                 picture = pdf.errorplot()
 
-            return render(request, 'visualPDF/form.html', {'form':form, 'picture':picture})
+            return render(request, 'visualPDF/form.html', {'form':form, 'picture':picture, 'home_action':'active'})
     else:
         form = PdfForm()
 
-    return render(request, 'visualPDF/form.html', {'form':form})
+    return render(request, 'visualPDF/form.html', {'form':form,'home_action':'active'})
+
+def about(request):
+    return render(request, 'visualPDF/about.html', {'about_action':'active'})

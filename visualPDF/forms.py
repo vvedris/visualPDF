@@ -32,34 +32,34 @@ class PdfForm(forms.Form):
         self.helper.form_action = 'form'
         self.helper.layout = Layout(
             Row(
-                Column('functions', css_class='form-group mx-sm-2'),
-                Column('compare_with', css_class='form-group mx-sm-2'),
+                'functions',
+                'compare_with',
                 css_class='form-row'
             ),
             Row(
-                Column('Q2', css_class='form-group mx-sm-2'),
+                'Q2',
                 css_class='form-row'
                 ),
             Row(
-                Column('xmin', css_class='form-group mx-sm-2'),
-                Column('xmax', css_class='form-group mx-sm-2'),
-                Column('points', css_class='form-group mx-sm-2'),
+                'xmin',
+                'xmax',
+                'points',
                 css_class='form-row'
             ),
             Row(
-                Column('ymin', css_class='form-group mx-sm-2'),
-                Column('ymax', css_class='form-group mx-sm-2'),
+                'ymin',
+                'ymax',
                 css_class='form-row'
                 ),
             Row(
-                Column('g', css_class='form-check mx-sm-2'),
-                Column('u', css_class='form-check mx-sm-2'),
-                Column('d', css_class='form-check mx-sm-2'),
+                Column('g', css_class='form-check mx-sm-1'),
+                Column('u', css_class='form-check mx-sm-1'),
+                Column('d', css_class='form-check mx-sm-1'),
                 css_class='form-row'
             ),
             Row(
-                Column('scale', css_class='form-group mx-sm-2'),
-                Column('error', css_class='form-group mx-sm-2'),
+                Column('scale', css_class='form-check mx-sm-1'),
+                Column('error', css_class='form-check mx-sm-1'),
                 css_class='form-row'
             )
         )
