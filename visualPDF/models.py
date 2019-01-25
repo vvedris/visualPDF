@@ -9,7 +9,7 @@ import base64
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Rectangle
 
-lhapdf.pathsAppend('/home/vvedris/visualPDF/share/LHAPDF')
+#lhapdf.pathsAppend('/home/vvedris/visualPDF/share/LHAPDF')
 
 # Create your models here.
 class Parton(models.Model):
@@ -32,13 +32,14 @@ class PdfFunction(models.Model):
     """class that creates PdfFunction object with gathered data.
     has functions __init__, __str__, plot, scale"""
 
-    def __init__(self, functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d,scale):
+    def __init__(self, functions, compare_with, fixed, fix, min, max, points, ymin, ymax, g, u, d,scale):
         """used when creating object"""
         self.functions = functions
         self.compare_with = compare_with
-        self.Q2 = Q2
-        self.xmin = xmin
-        self.xmax = xmax
+        self.fixed = fixed
+        self.fix = fix
+        self.min = min
+        self.max = max
         self.points = points
         self.ymin = ymin
         self.ymax = ymax
@@ -49,7 +50,7 @@ class PdfFunction(models.Model):
         self.scale = scale
 
     def __str__(self):
-        return self.functions, self.compare_with
+        return self.functions + self.compare_with
 
     def scale(self):
         """creates a list of numbers used for plotting.
@@ -57,11 +58,10 @@ class PdfFunction(models.Model):
         self.scale is used for determining which one to use for creating the list
         self.scale determines the scale in plot() function"""
         if self.scale == 'log':
-            space = numpy.logspace(math.log10(self.xmin),math.log10(self.xmax),self.points)
+            space = numpy.logspace(math.log10(self.min),math.log10(self.max),self.points)
         else:
-            space = numpy.linspace(self.xmin, self.xmax, self.points)
+            space = numpy.linspace(self.min, self.max, self.points)
             self.scale = 'linear'
-
         return space
 
     def plot(self):
@@ -79,7 +79,7 @@ class PdfFunction(models.Model):
         pdfsets = []
         lst = ['-','--']
         partons = Parton.partonList(self.parts)
-        xp = PdfFunction.scale(self)
+        fixp = PdfFunction.scale(self)
 
         if self.compare_with == 'none':
             titles = self.functions
@@ -96,17 +96,28 @@ class PdfFunction(models.Model):
             for key in partons:
                 x_data = []
                 y_data = []
-                for x in xp:
-                    xfx = pdf.xfxQ2(partons[key][0],x,self.Q2)
-                    x_data.append(x)
-                    y_data.append(xfx)
-                plt.plot(x_data,y_data,partons[key][1],ls = lst[num], label = key + ' ' + pdfset)
+                if self.fixed == 'Q fixed':
+                    for f in fixp:
+                        xfx = pdf.xfxQ2(partons[key][0],f,self.fix)
+                        x_data.append(f)
+                        y_data.append(xfx)
+                    plt.plot(x_data,y_data,partons[key][1],ls = lst[num], label = key + ' ' + pdfset)
+                elif self.fixed == 'x fixed':
+                    for f in fixp:
+                        xfx = pdf.xfxQ2(partons[key][0],self.fix,f)
+                        x_data.append(f)
+                        y_data.append(xfx)
+                    plt.plot(x_data,y_data,partons[key][1],ls = lst[num], label = key + ' ' + pdfset)
             plt.legend(loc = 2, prop =fontP,bbox_to_anchor = (1.0,1.0))
 
-        plt.axis([self.xmin,self.xmax,self.ymin, self.ymax])
+        plt.axis([self.min,self.max,self.ymin,self.ymax])
         plt.xscale(self.scale)
         plt.title(titles)
-        plt.xlabel('x')
+
+        if self.fixed == 'Q fixed':
+            plt.xlabel('x')
+        elif self.fixed == 'x fixed':
+            plt.xlabel('Q2')
         plt.ylabel(' x f(x,Q^2)')
 
         pictureIO = BytesIO()
@@ -129,7 +140,7 @@ class PdfFunction(models.Model):
         rect = []
         ps = []
         partons = Parton.partonList(self.parts)
-        xp = PdfFunction.scale(self)
+        fixp = PdfFunction.scale(self)
 
         if self.compare_with == 'none':
             titles = self.functions
@@ -150,12 +161,16 @@ class PdfFunction(models.Model):
                 y_data_min = []
                 y_data_max = []
 
-                for x in xp:
+                for f in fixp:
                     parton_values = []
-                    for i in range(pdf.size):
-                        parton_values.append(pdf_vectors[i].xfxQ2(partons[key][0],x,self.Q2))
+                    if self.fixed == 'Q fixed':
+                        for i in range(pdf.size):
+                            parton_values.append(pdf_vectors[i].xfxQ2(partons[key][0],f,self.fix))
+                    elif self.fixed == 'x fixed':
+                        for i in range(pdf.size):
+                            parton_values.append(pdf_vectors[i].xfxQ2(partons[key][0],self.fix,f))
                     error = pdf.uncertainty(parton_values)
-                    x_data.append(x)
+                    x_data.append(f)
                     if 'abkm09' in pdf.name:
                         if '+' in pdf.errorType:
                             y_data_min.append(error.central - error.errsymm_pdf)
@@ -181,10 +196,13 @@ class PdfFunction(models.Model):
                     ps.append(key+' '+pdfset)
 
         plt.legend(rect,ps,loc = 2, prop =fontP,bbox_to_anchor = (1.0,1.0))
-        plt.axis([self.xmin,self.xmax,self.ymin, self.ymax])
+        plt.axis([self.min,self.max,self.ymin, self.ymax])
         plt.xscale(self.scale)
         plt.title(titles)
-        plt.xlabel('x')
+        if self.fixed == 'Q fixed':
+            plt.xlabel('x')
+        elif self.fixed == 'x fixed':
+            plt.xlabel('Q2')
         plt.ylabel(' x f(x,Q^2)')
 
         pictureIO = BytesIO()

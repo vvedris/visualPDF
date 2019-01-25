@@ -14,9 +14,15 @@ def form(request):
         if form.is_valid():
             functions = form.cleaned_data['functions']
             compare_with = form.cleaned_data['compare_with']
-            Q2 = form.cleaned_data['Q2']
-            xmin = form.cleaned_data['xmin']
-            xmax = form.cleaned_data['xmax']
+            fixed = form.cleaned_data['fixed']
+            if fixed == 'Q fixed':
+                fix = form.cleaned_data['Q2']
+                min = form.cleaned_data['xmin']
+                max = form.cleaned_data['xmax']
+            elif fixed == 'x fixed':
+                fix = form.cleaned_data['x']
+                min = form.cleaned_data['Q2min']
+                max = form.cleaned_data['Q2max']
             points = form.cleaned_data['points']
             ymin = form.cleaned_data['ymin']
             ymax = form.cleaned_data['ymax']
@@ -26,7 +32,7 @@ def form(request):
             scale = form.cleaned_data['scale']
             error = form.cleaned_data['error']
 
-            pdf = PdfFunction(functions, compare_with, Q2, xmin, xmax, points, ymin, ymax, g, u, d, scale)
+            pdf = PdfFunction(functions, compare_with,fixed, fix, min, max, points, ymin, ymax, g, u, d, scale)
 
             if error == 'clean':
                 picture = pdf.plot()

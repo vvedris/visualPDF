@@ -1,10 +1,15 @@
 {% extends 'visualPDF/base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
     {% crispy form %}
 {% endblock %}
 
 {% block picture %}
-    <img src="data:image/png;base64, {{picture|safe}}">
+  {% if picture %}
+    <img class="responsivePDF" alt="Parton distribution functions" src="data:image/png;base64, {{picture|safe}}">
+  {% else %}
+    <img class="responsivePDF" alt="Parton distribution functions" src="{% static "images/home.png" %}" width="538px" height="430px">
+  {% endif %}
 {% endblock %}

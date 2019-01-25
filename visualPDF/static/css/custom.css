@@ -1,3 +1,11 @@
 .asteriskField {
     display: none;
 }
+
+body {
+    font-family: 'Mitr';
+}
+
+.container{
+    margin-left: 10px;
+}
