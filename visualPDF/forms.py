@@ -5,15 +5,15 @@ from crispy_forms.layout import Submit, Layout, Row, Column
 class PdfForm(forms.Form):
 
     """creates crispy_forms that gathers data needed for dynamically serving images"""
-
-    functions = forms.ChoiceField(choices=[('NNPDF31_nlo_pdfas','NNPDF31_nlo_pdfas'),('NNPDF21_lo_as_0119_100','NNPDF21_lo_as_0119_100'),('cteq66','cteq66'),('CT10','CT10')],
+    choice = [('cteq66','cteq66'),('MSTW2008nlo_asmzrange','MSTW2008nlo_asmzrange'),('NNPDF23_nlo_as_0118','NNPDF23_nlo_as_0118'),('abkm09_3_nlo','abkm09_3_nlo')]
+    functions = forms.ChoiceField(choices = choice,
     widget = forms.Select)
-    compare_with = forms.ChoiceField(choices=[('none','none'),('NNPDF31_nlo_pdfas','NNPDF31_nlo_pdfas'),('NNPDF21_lo_as_0119_100','NNPDF21_lo_as_0119_100'),('cteq66','cteq66'),('CT10','CT10')],
+    compare_with = forms.ChoiceField(choices = [('none','none')]+choice,
     widget = forms.Select, required=False)
     fixed = forms.ChoiceField(choices=[('Q fixed','Q fixed'),('x fixed','x fixed')], widget = forms.RadioSelect(), initial = 'Q fixed')
-    Q2 = forms.FloatField(min_value=0.1, max_value=10000000000, initial=100)
-    xmin = forms.FloatField(min_value=0.0000000001, max_value=1, initial=0.0001)
-    xmax = forms.FloatField(min_value=0.0000000001, max_value=1, initial=1)
+    Q2 = forms.FloatField(initial=100)
+    xmin = forms.FloatField(initial=0.0001)
+    xmax = forms.FloatField(initial=1)
     points = forms.IntegerField(min_value=0, max_value=10000, initial=1000)
     ymin = forms.IntegerField(min_value=-100, max_value=100, initial=0)
     ymax = forms.IntegerField(min_value=-100, max_value=100, initial=2)
