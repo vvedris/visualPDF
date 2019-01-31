@@ -8,14 +8,14 @@ function fixedxq(){
     var Q2min, Q2max, Q2maxl, Q2minl;
 
     xl[0].innerHTML = "X"
-    x.setAttribute("value","0.0001");
+    x.setAttribute("value","0.1");
     x.setAttribute("min","0.0000000001");
     x.setAttribute("max","1");
 
     Q2minl = document.querySelectorAll("label[for='id_xmin']");
     Q2minl[0].innerHTML = "Q2min";
     Q2min = document.getElementById('id_xmin');
-    Q2min.setAttribute("value","1");
+    Q2min.setAttribute("value","10");
     Q2min.setAttribute("min","0.1");
     Q2min.setAttribute("max","10000000000");
 

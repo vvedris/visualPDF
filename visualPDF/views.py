@@ -3,6 +3,9 @@ from django.contrib.sessions.models import Session
 from .forms import PdfForm
 from .models import PdfFunction
 
+from django.http import JsonResponse, HttpResponse
+import json
+
 # Create your views here.
 def form(request):
     """this view renders form fields from forms.py and if data is posted creates session and redirects you
@@ -20,9 +23,9 @@ def form(request):
                 min = form.cleaned_data['xmin']
                 max = form.cleaned_data['xmax']
             elif fixed == 'x fixed':
-                fix = form.cleaned_data['x']
-                min = form.cleaned_data['Q2min']
-                max = form.cleaned_data['Q2max']
+                fix = form.cleaned_data['Q2']
+                min = form.cleaned_data['xmin']
+                max = form.cleaned_data['xmax']
             points = form.cleaned_data['points']
             ymin = form.cleaned_data['ymin']
             ymax = form.cleaned_data['ymax']
@@ -39,7 +42,10 @@ def form(request):
             else:
                 picture = pdf.errorplot()
 
-            return render(request, 'visualPDF/form.html', {'form':form, 'picture':picture, 'home_action':'active'})
+            return JsonResponse({'picture':picture})
+
+        else:
+            return JsonResponse({'slovo':'nekaj ne štima'})
     else:
         form = PdfForm()
 
